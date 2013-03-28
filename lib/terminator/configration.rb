@@ -1,6 +1,7 @@
 require "redis"
 require "amqp"
 require 'logger'
+class ::Logger; alias_method :write, :<<; end
 
 module Terminator
 	module Configration
@@ -30,7 +31,6 @@ module Terminator
 				return $logger unless $logger
 				# initialize log
 				Dir.mkdir('log') unless File.exist?(File.join(Terminator.root, 'log'))
-				class ::Logger; alias_method :write, :<<; end
 
 				case ENV["RACK_ENV"]
 				when "production"

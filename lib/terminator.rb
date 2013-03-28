@@ -6,7 +6,6 @@ require 'ostruct'
 require "sinatra/base"
 require "sinatra/reloader"
 require "better_errors"
-require_relative "terminator/configration"
 require "active_support"
 require 'active_support/core_ext/string/inflections'
 require "active_support/core_ext/object/blank"
@@ -21,7 +20,6 @@ end
 
 Dir[File.join(File.dirname(__FILE__), 'extentions', '*.rb')].each{|file| require_relative file}
 Dir[File.join(File.dirname(__FILE__), 'terminator', 'app', 'model', '*.rb')].each{|file| require_relative file}
-require_relative './terminator/app/controller/application_controller'
 
 module Terminator
 	def self.env
@@ -32,6 +30,8 @@ module Terminator
 		@_root ||= File.join(File.dirname(File.expand_path(__FILE__)), '..')
 	end
 
+	require_relative './terminator/app/controller/application_controller'
+
 	module App
 		module Controller
 			def self.controllers_url_map
@@ -40,5 +40,6 @@ module Terminator
 		end#Controller
 	end#App
 end#Terminator
+require_relative "terminator/configration"
 
 Dir[File.join(File.dirname(__FILE__), 'terminator', 'app', 'controller', '*.rb')].each{|file| require_relative file}

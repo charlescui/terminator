@@ -16,9 +16,9 @@ set :deploy_to, "/home/www/terminator"
 # set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-role :web, ""                          # Your HTTP server, Apache/etc
-role :app, ""                          # This may be the same as your `Web` server
-role :db,  "", :primary => true # This is where Rails migrations will run
+role :web, "218.108.172.21"                          # Your HTTP server, Apache/etc
+role :app, "218.108.172.21"                          # This may be the same as your `Web` server
+role :db,  "218.108.172.21", :primary => true # This is where Rails migrations will run
 
 set :user, "www"
 set :use_sudo, false
@@ -28,7 +28,7 @@ after "deploy:restart", "deploy:cleanup"
 default_run_options[:pty] = true 
 ssh_options[:forward_agent] = true
 ssh_options[:auth_methods] = %w(publickey)
-ssh_options[:port] = 16677
+ssh_options[:port] = 27788
 
 namespace :deploy do
   task :start, :roles => :app do
@@ -46,8 +46,8 @@ after 'deploy:update_code' do
   softlinks = [
     "rm -rf #{release_path}/tmp/sockets;ln -nfs #{deploy_to}/shared/sockets #{release_path}/tmp/sockets",
     "rm -rf #{release_path}/tmp/pids;ln -nfs #{deploy_to}/shared/pids #{release_path}/tmp/pids",
-    "rm -rf #{release_path}/config/server.yml;ln -nfs #{deploy_to}/shared/system/server.yml #{release_path}/config/server.yml",
-    "rm -rf #{release_path}/config/thin.yml;ln -nfs #{deploy_to}/shared/system/server.yml #{release_path}/config/thin.yml"
+    "rm -rf #{release_path}/config/server.yml;ln -nfs #{deploy_to}/shared/config/server.yml #{release_path}/config/server.yml",
+    "rm -rf #{release_path}/config/thin.yml;ln -nfs #{deploy_to}/shared/config/server.yml #{release_path}/config/thin.yml"
     ]
   run "#{softlinks.join(';')}"
 end

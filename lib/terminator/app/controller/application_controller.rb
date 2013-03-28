@@ -55,14 +55,14 @@ module Terminator
 
 				BASEPATH = Terminator.root
 				# 设置视图文件目录
-    			BASEVIEWPATH = "#{BASEPATH}/terminator/app/view"
+    			BASEVIEWPATH = "#{BASEPATH}/lib/terminator/app/view"
     			set :views, BASEVIEWPATH
     			set :layout, File.join(BASEVIEWPATH, 'layout.erb')
 				
 				if respond_to? :public_folder
-					set :public_folder, "#{BASEPATH}/../public"
+					set :public_folder, "#{BASEPATH}/public"
 				else
-					set :public, "#{BASEPATH}/../public"
+					set :public, "#{BASEPATH}/public"
 				end
 				set :static, true
 
@@ -74,7 +74,7 @@ module Terminator
 			    	register Sinatra::Reloader
 			    	also_reload __FILE__
 					use BetterErrors::Middleware
-					BetterErrors.application_root = File.expand_path("..", __FILE__)
+					BetterErrors.application_root = BASEPATH
 			    end
 
 			    not_found do

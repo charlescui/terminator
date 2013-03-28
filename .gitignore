@@ -51,6 +51,7 @@ pkg
 log/*
 ./config/server.yml
 ./config/thin.yml
+./config/deploy.rb
 tmp/pids
 tmp/sockets
 .DS_Store
