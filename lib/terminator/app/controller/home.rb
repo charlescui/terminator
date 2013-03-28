@@ -22,7 +22,7 @@ module Terminator
 						out.callback{settings.connections.delete(out)}
 
 						out << Time.now.to_s
-						EventMachine.add_periodic_timer(10){
+						EventMachine.add_timer(10){
 							out << Time.now.to_s
 							out.close
 						}
