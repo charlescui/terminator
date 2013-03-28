@@ -14,7 +14,7 @@ module Terminator
 				get '/async' do
 					stream :keep_open do |out|
 						settings.connections.each do |another|
-							another << "Someone comming."
+							another << "Someone comming at #{Time.now}."
 						end
 						# 将连接保存起来
 						settings.connections << out

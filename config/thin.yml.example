@@ -3,7 +3,7 @@ chdir: /home/www/terminator/current
 environment: production
 address: 0.0.0.0
 port: 7000
-timeout: 3600
+timeout: 30
 log: log/production.log
 pid: tmp/pids/thin.pid
 max_conns: 1024
