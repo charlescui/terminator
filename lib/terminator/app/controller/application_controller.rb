@@ -1,13 +1,14 @@
-module Postman
+module Terminator
 	module App
 		module Controller
 			class RequireUserException < RuntimeError; end
 			class ApplicationController < Sinatra::Base
 				include Model
 
+				# 每个子类继承ApplicationController时，会自动生成路由地址
 				def self.inherited(subclass)
 					super
-					subclass_path = subclass.to_s.gsub('Postman::App::Controller::', '').underscore
+					subclass_path = subclass.to_s.gsub('Terminator::App::Controller::', '').underscore
 					subclass.class_eval{
 						# 每个controller对应的view在BASEVIEWPATH目录下
 						# 以controller为子目录名，包含了所需要的每个erb模板文件
@@ -47,9 +48,14 @@ module Postman
 	    			end
 				end
 
-				BASEPATH = File.join(File.dirname(File.expand_path(__FILE__)), '..', '..', '..')
+				# 前置过滤器
+				before do
+					procline(request.path_info)
+				end
+
+				BASEPATH = Terminator.root
 				# 设置视图文件目录
-    			BASEVIEWPATH = "#{BASEPATH}/postman/app/view"
+    			BASEVIEWPATH = "#{BASEPATH}/terminator/app/view"
     			set :views, BASEVIEWPATH
     			set :layout, File.join(BASEVIEWPATH, 'layout.erb')
 				
@@ -79,6 +85,7 @@ module Postman
 			    	perb :"500", :views => BASEVIEWPATH
 				end
 
+				# 首页内容由README.md文件的markdown语法生成
 				get	'/' do
 					@@_read_html ||= Kramdown::Document.new(read_me).to_html
 				end

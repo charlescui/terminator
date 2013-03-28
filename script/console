@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 APP_PATH = File.expand_path('../..',  __FILE__)
-require File.join(APP_PATH, 'lib/postman')
+require File.join(APP_PATH, 'lib/terminator')
 
-include Postman::App::Controller
-include Postman::App::Model
+include Terminator::App::Controller
+include Terminator::App::Model
 
 require 'irb'
 require 'irb/completion'
 require "pry"
 
-require 'ruby-debug' if Postman.env == 'development'
+require 'ruby-debug' if Terminator.env == 'development'
 
 binding.pry

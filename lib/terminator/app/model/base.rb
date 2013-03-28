@@ -1,8 +1,9 @@
 require "virtus"
 
-module Postman
+module Terminator
 	module App
 		module Model
+			# Base模型是基于redis作为数据库的简洁ORM模型
 			class Base
 				include Virtus
 				attribute :id, String, :default => proc{UUID.generate.gsub("-",'')}
@@ -10,13 +11,13 @@ module Postman
 				# 根据ID查找对象
 				def self.find(id)
 					key = self.redis_key(id)
-					h = ::P::C.redis.hgetall(key)
+					h = ::T::C.redis.hgetall(key)
 					h && self.new(h)
 				end
 
 				def self.del(id)
 					key = self.redis_key(id)
-					::P::C.redis.del(key)
+					::T::C.redis.del(key)
 				end
 
 				def del
@@ -27,12 +28,12 @@ module Postman
 				def del_attr(attrt)
 					key = self.redis_key(id)
 					self.attributes[attrt.to_sym] = nil
-					::P::C.redis.hdel(key, attrt.to_s)
+					::T::C.redis.hdel(key, attrt.to_s)
 				end
 
 				# 删除某一属性并保存
 				def del_attr!(attrt)
-					::P::C.redis.multi do
+					::T::C.redis.multi do
 						self.del_attr(attrt)
 						self.save
 					end
@@ -40,10 +41,10 @@ module Postman
 
 				# 查找某个模型所有实例数据
 				def self.all
-					keys = ::P::C.redis.keys("#{self.prefix_redis_key}::*")
-					items = ::P::C.redis.multi do
+					keys = ::T::C.redis.keys("#{self.prefix_redis_key}::*")
+					items = ::T::C.redis.multi do
 						keys.map do |key|
-							::P::C.redis.hgetall(key)
+							::T::C.redis.hgetall(key)
 						end
 					end
 					items.map{|item|self.new(item)}.compact
@@ -51,7 +52,7 @@ module Postman
 
 				# 判断某个模型的某条数据是否存在
 				def self.exists(id)
-					::P::C.redis.exists self.redis_key(id)
+					::T::C.redis.exists self.redis_key(id)
 				end
 
 				def exists
@@ -60,7 +61,7 @@ module Postman
 
 				# 保存数据
 				def save
-					::P::C.redis.hmset(self.redis_key, *self.attributes)
+					::T::C.redis.hmset(self.redis_key, *self.attributes)
 				end
 
 				# 保存在内存中的Key

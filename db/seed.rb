@@ -1,6 +1,6 @@
-require_relative '../lib/postman'
+require_relative '../lib/terminator'
 
-include Postman::App::Model
+include Terminator::App::Model
 
 
 u1 = User.new(

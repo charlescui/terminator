@@ -1,9 +1,9 @@
 require "pp"
-require "./lib/postman"
-if Postman.env == 'development'
+require "./lib/terminator"
+if Terminator.env == 'development'
 	require "ruby-debug"
 end
 
-pp ::Postman::App::Controller.controllers_url_map
+pp ::Terminator::App::Controller.controllers_url_map
 
-run Rack::URLMap.new(::Postman::App::Controller.controllers_url_map)
+run Rack::URLMap.new(::Terminator::App::Controller.controllers_url_map)

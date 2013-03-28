@@ -50,7 +50,9 @@ pkg
 
 log/*
 ./config/server.yml
+./config/thin.yml
 tmp/pids
 tmp/sockets
 .DS_Store
 *.mkm
+
