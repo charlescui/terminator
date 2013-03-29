@@ -38,7 +38,7 @@ B <- Server
 用curl测试下
 
 ```
-saimatoMacBook-Pro:terminator cuizheng$ curl -v localhost:7000/home/async
+saimatoMacBook-Pro:terminator cuizheng$ curl -viN localhost:7000/home/async
 * About to connect() to localhost port 7000 (#0)
 *   Trying ::1... Connection refused
 *   Trying 127.0.0.1... connected
