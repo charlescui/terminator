@@ -1,10 +1,10 @@
+require 'active_record'
+
 module Terminator
 	module App
 		module Controller
 			class RequireUserException < RuntimeError; end
 			class ApplicationController < Sinatra::Base
-				include Model
-
 				# 每个子类继承ApplicationController时，会自动生成路由地址
 				def self.inherited(subclass)
 					super
@@ -19,16 +19,27 @@ module Terminator
 				end
 
 				helpers do
-					# 用户鉴权
-					# 将用户数据保存在redis的hash结构中
-					# user_credentials是每个user对象的id
+					## 通过单点登录认证方式获得当前登录用户
+					def current_user_session
+						return @current_user_session if defined?(@current_user_session)
+						@current_user_session = UserSession.find
+					end
+
 					def current_user
-						@current_user ||= User.find_by_credentials(params[:user_credentials])
+						return @current_user if defined?(@current_user)
+						@current_user = current_user_session && current_user_session.record
 					end
 
 					def require_user
 						unless current_user
-							halt "No user found!!!"
+							halt 500, {:status => -1, :msg => "need auth first!"}.to_json
+							return false
+						end
+					end
+
+					def authenticate
+						authenticate_or_request_with_http_basic do |username, password|
+							username == 'terminator' && password == 'password'
 						end
 					end
 
@@ -44,7 +55,7 @@ module Terminator
 	    			end
 
 	    			def read_me
-	    				@@_read_me ||= IO.read(File.join(BASEPATH,'..','README.md'))
+	    				@@_read_me ||= IO.read(File.join(BASEPATH, 'README.md'))
 	    			end
 				end
 
@@ -66,7 +77,12 @@ module Terminator
 				end
 				set :static, true
 
+				# release thread current connection return to connection pool in multi-thread mode
+				use ActiveRecord::ConnectionAdapters::ConnectionManagement
+
 				configure :production, :development do
+					require 'rack/session/dalli'
+					use Rack::Session::Dalli, :cache => $cache
 			    	enable :logging
 			    end
 

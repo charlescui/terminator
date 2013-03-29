@@ -2,13 +2,10 @@
 APP_PATH = File.expand_path('../..',  __FILE__)
 require File.join(APP_PATH, 'lib/terminator')
 
-include Terminator::App::Controller
-include Terminator::App::Model
-
 require 'irb'
 require 'irb/completion'
 require "pry"
 
-require 'ruby-debug' if Terminator.env == 'development'
+require 'ruby-debug' if (ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == nil)
 
 binding.pry

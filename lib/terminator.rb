@@ -19,12 +19,8 @@ rescue Exception => e
 end
 
 Dir[File.join(File.dirname(__FILE__), 'extentions', '*.rb')].each{|file| require_relative file}
-Dir[File.join(File.dirname(__FILE__), 'terminator', 'app', 'model', '*.rb')].each{|file| require_relative file}
 
 module Terminator
-	def self.env
-		@_env ||= ENV["ENV"] || ENV["RACK_ENV"] || "development"
-	end
 
 	def self.root
 		@_root ||= File.join(File.dirname(File.expand_path(__FILE__)), '..')
@@ -40,6 +36,9 @@ module Terminator
 		end#Controller
 	end#App
 end#Terminator
-require_relative "terminator/configration"
 
+require_relative "terminator/configration"
+require_relative "terminator/initialize"
+
+Dir[File.join(File.dirname(__FILE__), 'terminator', 'app', 'model', '*.rb')].each{|file| require_relative file}
 Dir[File.join(File.dirname(__FILE__), 'terminator', 'app', 'controller', '*.rb')].each{|file| require_relative file}

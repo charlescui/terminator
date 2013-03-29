@@ -17,8 +17,8 @@ group :development do
   gem 'ruby-debug19'
 end
 
-group :production do
-  
+group :production, :test do
+  gem 'sqlite3'
 end
 
 gem "pry"
@@ -32,8 +32,15 @@ gem 'virtus'
 gem "hiredis"
 gem "sinatra"
 gem "kramdown"
+gem 'redis-objects'
 gem "better_errors"
 gem "eventmachine"
-gem "activesupport"
 gem 'sinatra-contrib'
-gem 'sinatra-websocket'
+
+gem 'activerecord'
+gem 'activesupport'
+gem 'mysql2'
+gem 'dalli', :require => 'active_support/cache/dalli_store'
+gem 'kgio'
+gem 'rails3_acts_as_paranoid'
+gem 'authlogic'
