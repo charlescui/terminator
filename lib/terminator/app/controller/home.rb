@@ -5,7 +5,7 @@ class Home < Terminator::App::Controller::ApplicationController
 
 	get '/' do
 		# 如果是Web Service，约定返回数据结构如下
-		{:status => 0, :msg => 'ok', :data => [1,2,3]}
+		{:status => 0, :msg => 'ok', :data => [1,2,{"key" => "value"}]}.to_json
 	end
 
 	get '/async' do

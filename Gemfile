@@ -12,13 +12,17 @@ group :development do
   gem "bundler", "> 1.0.0"
   gem "jeweler", "~> 1.8.4"
   gem "simplecov"
-  gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
-  gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
-  gem 'ruby-debug19'
+#  gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
+#  gem 'ruby-debug19'
+#  gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
 end
 
-group :production, :test do
+group :development, :test do
   gem 'sqlite3'
+end
+
+group :production do
+  gem 'mysql2'
 end
 
 gem "pry"
@@ -39,7 +43,6 @@ gem 'sinatra-contrib'
 
 gem 'activerecord'
 gem 'activesupport'
-gem 'mysql2'
 gem 'dalli', :require => 'active_support/cache/dalli_store'
 gem 'kgio'
 gem 'rails3_acts_as_paranoid'

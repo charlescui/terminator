@@ -35,7 +35,7 @@ namespace :deploy do
     run "cd #{current_path};bundle exec thin start -C config/thin.yml"
   end
   task :restart, :roles => :app do   
-	run "cd #{current_path};bundle exec kill -HUP `tail /home/www/rca.rc/current/tmp/pids/thin.*.pid | grep ^[0-9]`"
+	  run "cd #{current_path};bundle exec kill -HUP `tail #{current_path}/tmp/pids/thin.*.pid | grep ^[0-9]`"
   end
   task :stop, :roles => :app do   
     run "cd #{current_path};bundle exec thin stop -C config/thin.yml"
@@ -47,7 +47,7 @@ after 'deploy:update_code' do
     "rm -rf #{release_path}/tmp/sockets;ln -nfs #{deploy_to}/shared/sockets #{release_path}/tmp/sockets",
     "rm -rf #{release_path}/tmp/pids;ln -nfs #{deploy_to}/shared/pids #{release_path}/tmp/pids",
     "rm -rf #{release_path}/config/server.yml;ln -nfs #{deploy_to}/shared/config/server.yml #{release_path}/config/server.yml",
-    "rm -rf #{release_path}/config/thin.yml;ln -nfs #{deploy_to}/shared/config/server.yml #{release_path}/config/thin.yml"
+    "rm -rf #{release_path}/config/thin.yml;ln -nfs #{deploy_to}/shared/config/thin.yml #{release_path}/config/thin.yml"
     ]
   run "#{softlinks.join(';')}"
 end
